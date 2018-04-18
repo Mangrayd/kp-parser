@@ -1,6 +1,6 @@
 {
   "name": "kp-parser",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "moving from php",
   "main": "index.js",
   "scripts": {

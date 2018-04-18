@@ -11,18 +11,7 @@ class KPparser {
 
 		const parseUrl = this.baseUrl + id + '/';
 
-		needle.get(parseUrl, (err, res) => {
-
-
-			// errors processing
-
-			// console.log(res);
-			// console.log(res.statusCode);
-			// console.log(res.statusMessage);
-
-			if (err) {
-				console.log(err);
-			}
+		needle('get', parseUrl).then((res) =>{
 
 			// obj filling
 			this.$response = cheerio.load(res.body);
@@ -42,7 +31,10 @@ class KPparser {
 			this.filmObj['ratingIMDb'] = this.getRatingIMDb();
 
 			console.log(this.filmObj);
-
+		})
+		.catch(function(err) {
+			console.log('Call the locksmith!');
+			console.log(err);
 		});
 	}
 	/*

@@ -11,24 +11,33 @@ class KPparser {
 
 		const parseUrl = this.baseUrl + id + '/';
 
-		needle('get', parseUrl).then((res) =>{
+		return needle('get', parseUrl).then((res) =>{
 
 			// obj filling
 			this.$response = cheerio.load(res.body);
 
+			// main info
 			this.filmObj['titleRus']   = this.getTitleRus();
 			this.filmObj['titleOrig']  = this.getTitleOrig();
 			this.filmObj['desc']       = this.getDesc();
 
 			this.filmObj['year']       = this.getYear();
 			this.filmObj['countries']  = this.getCountries();
-			this.filmObj['slogan']     = this.getSlogan();
-			this.filmObj['directors']  = this.getDirectors();
+			this.filmObj['genres']     = this.getGenres();
 
+			this.filmObj['directors']  = this.getDirectors();
 			this.filmObj['actors']     = this.getActors();
 
 			this.filmObj['ratingKP']   = this.getRatingKP();
 			this.filmObj['ratingIMDb'] = this.getRatingIMDb();
+
+			// additional info
+			this.filmObj['slogan']        = this.getSlogan();
+			this.filmObj['time']          = this.getTime();
+			this.filmObj['screenwriters'] = this.getScreenwriters();
+			this.filmObj['producers']     = this.getProducers();
+			this.filmObj['composers']     = this.getComposers();
+
 
 			return this.filmObj;
 		})
@@ -77,20 +86,42 @@ class KPparser {
 	getCountries(){
 		return this.getListElementsValues( this.getTableRowValue(2).find('a') );
 	}
-	getSlogan(){
-		return this.getTableRowValue(3).text();
+	getGenres(){
+		return this.getListElementsValues( this.getTableRowValue(11).find('span a') );
 	}
 	getDirectors(){
 		return this.getListElementsValues( this.getTableRowValue(4).find('a') );
 	}
 	getActors(){
-		return this.getListElementsValues( this.$response('div#actorList ul').first().find('li').not(':last-of-type') );
+		return this.getListElementsValues( this.$response('div#actorList ul').first().find('li a').not((i, el) => {
+			return this.$response(el).text() === '...';
+		}) );
 	}
 	getRatingKP(){
 		return this.$response('div#block_rating span.rating_ball').text();
 	}
 	getRatingIMDb(){
 		return this.$response('div#block_rating').find('div.div1').next().text().split(' ')[1];
+	}
+
+	getSlogan(){
+		return this.getTableRowValue(3).text();
+	}
+	getTime(){
+		return this.getTableRowValue(22).text().split(' / ')[0];
+	}
+	getScreenwriters(){
+		return this.getListElementsValues( this.getTableRowValue(5).find('a').not((i, el) => {
+			return this.$response(el).text() === '...';
+		}) );
+	}
+	getProducers(){
+		return this.getListElementsValues( this.getTableRowValue(6).find('a').not((i, el) => {
+			return this.$response(el).text() === '...';
+		}) );
+	}
+	getComposers(){
+		return this.getListElementsValues( this.getTableRowValue(7).find('a') );
 	}
 }
 

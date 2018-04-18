@@ -30,11 +30,10 @@ class KPparser {
 			this.filmObj['ratingKP']   = this.getRatingKP();
 			this.filmObj['ratingIMDb'] = this.getRatingIMDb();
 
-			console.log(this.filmObj);
+			return this.filmObj;
 		})
-		.catch(function(err) {
-			console.log('Call the locksmith!');
-			console.log(err);
+		.catch((err) => {
+			console.log(`Error: ${err}`);
 		});
 	}
 	/*

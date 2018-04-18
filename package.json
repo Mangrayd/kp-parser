@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/Mangrayd/kp-parser/issues"
   },
-  "homepage": "https://github.com/Mangrayd/kp-parser#readme"
+  "homepage": "https://github.com/Mangrayd/kp-parser#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "needle": "^2.2.0"
+  }
 }

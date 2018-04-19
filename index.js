@@ -33,10 +33,14 @@ class KPparser {
 
 			// additional info
 			this.filmObj['slogan']        = this.getSlogan();
+			this.filmObj['age']           = this.getAge();
 			this.filmObj['time']          = this.getTime();
 			this.filmObj['screenwriters'] = this.getScreenwriters();
 			this.filmObj['producers']     = this.getProducers();
 			this.filmObj['composers']     = this.getComposers();
+			this.filmObj['artists']       = this.getArtists();
+			this.filmObj['operators']     = this.getOperators();
+			this.filmObj['mounting']      = this.getMounting();
 
 
 			return this.filmObj;
@@ -107,8 +111,11 @@ class KPparser {
 	getSlogan(){
 		return this.getTableRowValue(3).text();
 	}
+	getAge(){
+		return this.$response('table.info tr').find('td .ageLimit').next().text().split(' / ')[0]
+	}
 	getTime(){
-		return this.getTableRowValue(22).text().split(' / ')[0];
+		return this.$response('table.info tr').find('td.time').text().split(' / ')[0]
 	}
 	getScreenwriters(){
 		return this.getListElementsValues( this.getTableRowValue(5).find('a').not((i, el) => {
@@ -120,9 +127,25 @@ class KPparser {
 			return this.$response(el).text() === '...';
 		}) );
 	}
-	getComposers(){
-		return this.getListElementsValues( this.getTableRowValue(7).find('a') );
+	getOperators(){
+		return this.getListElementsValues( this.getTableRowValue(7).find('a').not((i, el) => {
+			return this.$response(el).text() === '...';
+		}) );
 	}
+	getComposers(){
+		return this.getListElementsValues( this.getTableRowValue(8).find('a') );
+	}
+	getArtists(){
+		return this.getListElementsValues( this.getTableRowValue(9).find('a').not((i, el) => {
+			return this.$response(el).text() === '...';
+		}) );
+	}
+	getMounting(){
+		return this.getListElementsValues( this.getTableRowValue(10).find('a').not((i, el) => {
+			return this.$response(el).text() === '...';
+		}) );
+	}
+
 }
 
 module.exports = KPparser;
